@@ -10,15 +10,6 @@ defmodule VispanaWeb.VispanaCommon do
     log(:debug, "Started mounting...")
     config_host = params["config_host"]
 
-    # FIXME: The port should really be looked up via the vespa model
-    # # Get tenant, application and instance from
-    # :19071/config/v1/cloud.config.application-id
-    # And then get the model from
-    # :19071/config/v2/tenant/{tenant}/application/{application}/cloud.config.model
-    # The config control endpoint port is the port tagged with "state external query http"
-    # in the "container-clustercontroller" service with "index" == 0
-    # config_control_endpoint = String.replace(config_host, ":19071", ":19050")
-
     socket =
       socket
       |> assign(:refresh, %RefreshInterval{interval: -1})
@@ -54,9 +45,6 @@ defmodule VispanaWeb.VispanaCommon do
 
   @impl true
   def get_config_control_endpoint(vespa_cluster, config_host) do
-    # Model is the ".hosts" result from
-    # :19071/config/v2/tenant/default/application/default/cloud.config.model
-
     [port] =
       Enum.flat_map(vespa_cluster.model, fn model_host ->
         model_host
