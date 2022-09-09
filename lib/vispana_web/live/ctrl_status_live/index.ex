@@ -1,4 +1,4 @@
-defmodule VispanaWeb.ContentLive.Index do
+defmodule VispanaWeb.CtrlStatusLive.Index do
   import Logger, warn: false
 
   use VispanaWeb, :live_view
@@ -21,18 +21,15 @@ defmodule VispanaWeb.ContentLive.Index do
   end
 
   @impl true
-  def handle_event("refresh_interval", %{"refresh_interval" => refresh_params}, socket) do
-    VispanaCommon.handle_event(
-      "refresh_interval",
-      %{"refresh_interval" => refresh_params},
-      socket
-    )
+  def handle_event( "refresh_interval", %{"refresh_interval" => refresh_params}, socket) do
+    VispanaCommon.handle_event("refresh_interval", %{"refresh_interval" => refresh_params}, socket)
   end
 
   @impl true
   def handle_info(:refresh, socket) do
     VispanaCommon.handle_info(:refresh, socket)
   end
+
 
   @impl true
   def handle_info(_, socket) do

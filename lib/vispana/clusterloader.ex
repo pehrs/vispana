@@ -31,13 +31,14 @@ defmodule Vispana.ClusterLoader do
   end
 
   defp vespa_cluster_loader(config_host) do
-    [config_data, container_data, content_clusters_data, app_package,  metrics] =
+    [config_data, container_data, content_clusters_data, app_package,  metrics, model] =
       [
         start_async(fn -> fetch_config_data(config_host) end),
         start_async(fn -> fetch_and_aggregate_container_data(config_host) end),
         start_async(fn -> fetch_and_aggregate_content_data(config_host) end),
         start_async(fn -> fetch_app_package(config_host) end),
-        start_async(fn -> fetch_metrics(config_host) end)
+        start_async(fn -> fetch_metrics(config_host) end),
+        start_async(fn -> fetch_model(config_host) end)
       ]
       |> Enum.map(fn task ->
           case Task.await(task, :infinity) do
@@ -51,7 +52,8 @@ defmodule Vispana.ClusterLoader do
       configCluster: mount_config_cluster(config_data, metrics),
       containerClusters: mount_container_cluster(container_data, metrics),
       contentClusters: mount_content_clusters(content_clusters_data, metrics),
-      appPackage: app_package
+      appPackage: app_package,
+      model: model
     }
   end
 
@@ -405,8 +407,21 @@ defmodule Vispana.ClusterLoader do
 
     http_get(url)
     |> http_map(fn decoded_body ->
-      decoded_body["nodes"]
-      |> Enum.group_by(fn node -> node["hostname"] end)
+                   decoded_body["nodes"]
+                   |> Enum.group_by(fn node -> node["hostname"] end)
+    end, url)
+  end
+
+  defp fetch_model(config_host) do
+    # The code below assumes the default tenant and application.
+    # # Get tenant and application from
+    # :19071/config/v1/cloud.config.application-id
+    # And then get the model from
+    url = config_host <> "/config/v2/tenant/default/application/default/cloud.config.model"
+
+    http_get(url)
+    |> http_map(fn decoded_body ->
+                   decoded_body["hosts"]
     end, url)
   end
 

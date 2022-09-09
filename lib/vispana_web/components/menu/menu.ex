@@ -1,7 +1,7 @@
 defmodule VispanaWeb.Menu do
   use VispanaWeb, :live_component
 
-  import Logger, warn: false
+    import Logger, warn: false
 
   @impl true
   def mount(socket) do
@@ -10,10 +10,12 @@ defmodule VispanaWeb.Menu do
       VispanaWeb.ContainerLive.Index -> "container"
       VispanaWeb.ContentLive.Index -> "content"
       VispanaWeb.AppPackageLive.Index -> "apppackage"
+      VispanaWeb.CtrlStatusLive.Index -> "ctrlstatus"
       _ -> raise "No views match"
     end
     {:ok, socket |> assign(:view, view)}
   end
+
 
   @impl true
   def render(assigns) do
@@ -45,6 +47,13 @@ defmodule VispanaWeb.Menu do
           <i class="fas fa-archive text-xs mr-2"></i>
           Application package
         </a>
+
+        <a href="/ctrlstatus?config_host=<%= @config_host %>" class='mb-3 capitalize font-medium text-sm hover:text-white transition ease-in-out duration-500 <%= if @view == "ctrlstatus" do "text-yellow-400" else "text-gray-300" end %>'>
+          <i class="fas fa-table text-xs mr-2"></i>
+          Controller Status Page
+        </a>
+
+
       </div>
     </div>
     """

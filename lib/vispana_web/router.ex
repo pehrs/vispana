@@ -22,6 +22,7 @@ defmodule VispanaWeb.Router do
     live "/container", ContainerLive.Index, :container
     live "/content", ContentLive.Index, :content
     live "/apppackage", AppPackageLive.Index, :apppackage
+    live "/ctrlstatus", CtrlStatusLive.Index, :ctrlstatus
   end
 
   # Other scopes may use custom stacks.

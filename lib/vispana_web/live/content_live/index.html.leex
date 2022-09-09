@@ -163,7 +163,11 @@
                                       </td>
                                       <!-- host column -->
                                       <td class="px-6 py-2 whitespace-nowrap text-xs text-gray-300">
-                                        <p class="overflow-ellipsis overflow-hidden"><%= contentNode.host.hostname %></p>
+                                        <a target="content_details"
+                                           href="<%= Vispana.Cluster.VespaCluster.get_content_node_endpoint(@nodes, contentNode.host.hostname) %>" class="overflow-ellipsis overflow-hidden">
+                                          <%= contentNode.host.hostname %>
+                                          <i class="fas fa-external-link-alt text-xs mr-2"></i>
+                                        </a>
                                       </td>
 
                                       <!-- group/distribution key column -->
